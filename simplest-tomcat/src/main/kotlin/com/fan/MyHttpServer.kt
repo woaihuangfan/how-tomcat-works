@@ -1,4 +1,4 @@
-package org.fan
+package com.fan
 
 import java.net.ServerSocket
 import java.net.Socket
