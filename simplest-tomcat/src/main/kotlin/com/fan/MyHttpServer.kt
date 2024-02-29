@@ -1,70 +1,17 @@
 package com.fan
 
-import java.net.ServerSocket
 import java.net.Socket
-import java.net.SocketException
 import java.nio.charset.StandardCharsets
 
 
-class MyHttpServer(private val port: Int) {
+class MyHttpServer(port: Int) : BaseHttpServer(port) {
 
-    private lateinit var serverSocket: ServerSocket
-
-    private var isRunning = true
-
-    fun start() {
-        createServerSocket(port)
-        println("${currentThreadName()}Server started successfully, listening on port $port")
-        Thread {
-            while (isRunning) {
-                val clientSocket = acceptClientConnection(serverSocket)
-                clientSocket?.let {
-                    try {
-                        handleClientRequest(clientSocket)
-                    } catch (e: Exception) {
-                        e.printStackTrace()
-                    } finally {
-                        closeSocket(clientSocket)
-                    }
-                }
-            }
-        }.start()
-    }
-
-    private fun closeSocket(clientSocket: Socket) {
-        checkIfSocketClosed(clientSocket)
-        if (!clientSocket.isClosed) {
-            clientSocket.close()
-            checkIfSocketClosed(clientSocket)
-        }
-    }
-
-    private fun checkIfSocketClosed(clientSocket: Socket) {
-        println("${currentThreadName()}client socket closed? ${clientSocket.isClosed}")
-    }
-
-    private fun createServerSocket(port: Int) {
-        this.serverSocket = ServerSocket(port)
-    }
-
-    private fun acceptClientConnection(serverSocket: ServerSocket): Socket? {
-        try {
-            val clientSocket = serverSocket.accept()
-            println("${currentThreadName()}Accepted client connection from: ${clientSocket.inetAddress}")
-            return clientSocket
-        } catch (e: SocketException) {
-            //socket maybe closed from client, ignore
-            println("${currentThreadName()} ${e.message}")
-        }
-        return null
-    }
-
-    private fun handleClientRequest(clientSocket: Socket) {
-        val requestBytes = readBytesFromSocketInputStream(clientSocket)
+    override fun processSocket(socket: Socket) {
+        val requestBytes = readBytesFromSocketInputStream(socket)
         println("${currentThreadName()}Received bytes from client:${requestBytes.contentToString()}")
         val httpRequest = parseBytesToHttpRequest(requestBytes)
         val httpResponse = buildResponse(httpRequest)
-        sendResponseToClient(httpResponse, clientSocket)
+        sendResponseToClient(httpResponse, socket)
     }
 
     private fun readBytesFromSocketInputStream(socket: Socket): ByteArray {
@@ -83,7 +30,6 @@ class MyHttpServer(private val port: Int) {
         val protocol = extractProtocol(plainRequest)
         return Request(httpMethod, protocol, uri)
     }
-
 
     private fun extractHttpMethod(plainRequest: String): String {
         return plainRequest.substring(0, plainRequest.indexOf(" "))
@@ -119,10 +65,5 @@ class MyHttpServer(private val port: Int) {
 
     private fun currentThreadName() = "[${Thread.currentThread().name}] "
 
-    fun stop() {
-        isRunning = false
-        if (::serverSocket.isInitialized) {
-            serverSocket.close()
-        }
-    }
+
 }
