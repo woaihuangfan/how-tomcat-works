@@ -6,7 +6,7 @@
 
     <servlet>
         <servlet-name>DemoServlet</servlet-name>
-        <servlet-class>com.fan.com.fan.DemoServlet</servlet-class>
+        <servlet-class>com.fan.DemoServlet</servlet-class>
     </servlet>
 
     <servlet-mapping>

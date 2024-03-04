@@ -1,4 +1,4 @@
-package com.fan.com.fan
+package com.fan
 
 import jakarta.servlet.http.HttpServlet
 import jakarta.servlet.http.HttpServletRequest
