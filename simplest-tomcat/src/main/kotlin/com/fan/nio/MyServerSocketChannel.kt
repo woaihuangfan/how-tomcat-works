@@ -38,6 +38,7 @@ class MyServerSocketChannel(private val port: Int, private val socketHandler: So
                         val socketChannel = channel.accept()
                         socketChannel.configureBlocking(false)
                         socketChannel.register(selector, 0).interestOps(SelectionKey.OP_READ or SelectionKey.OP_WRITE)
+                        iterator.remove()
                     }
                     if (key.isReadable && key.isWritable) {
                         val socketChannel = key.channel() as SocketChannel
@@ -48,8 +49,9 @@ class MyServerSocketChannel(private val port: Int, private val socketHandler: So
                         } finally {
                             socketChannel.close()
                         }
+                        iterator.remove()
                     }
-                    iterator.remove()
+
                 }
 
 
