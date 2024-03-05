@@ -1,4 +1,4 @@
-package com.fan
+package com.fan.http
 
 data class Request(
     val method: String,

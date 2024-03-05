@@ -1,10 +1,12 @@
-package com.fan
+package com.fan.server
 
+import com.fan.http.Request
+import com.fan.http.Response
 import java.net.Socket
 import java.nio.charset.StandardCharsets
 
 
-class MyHttpServer(port: Int) : BaseHttpServer(port) {
+class SampleHttpServer(port: Int) : BaseHttpServer(port) {
 
     override fun processSocket(socket: Socket) {
         val requestBytes = readBytesFromSocketInputStream(socket)

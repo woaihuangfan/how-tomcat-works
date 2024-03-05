@@ -1,4 +1,6 @@
-package com.fan
+package com.fan.server
+
+import com.fan.bio.MySocketServer
 
 abstract class BaseHttpServer(private val port: Int) : SocketHandler {
 

@@ -1,4 +1,4 @@
-package com.fan
+package com.fan.http
 
 data class Response(
     val statusLine: String,

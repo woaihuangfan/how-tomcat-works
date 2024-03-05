@@ -1,5 +1,6 @@
-package com.fan
+package com.fan.bio
 
+import com.fan.server.SocketHandler
 import java.net.ServerSocket
 import java.net.Socket
 import java.net.SocketException

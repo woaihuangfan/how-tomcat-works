@@ -1,13 +1,16 @@
-package com.fan
+package com.fan.server
 
+import com.fan.Constants.TEST_PORT
 import com.fan.RequestHelper.sendRequest
 import com.fan.ResponseHelper.decodeResponse
 import org.junit.jupiter.api.AfterEach
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-class ChunkHttpServerTest {
-    private val httpServer = ChunkHttpServer(Constants.TEST_PORT)
+
+class SampleHttpServerTest {
+
+    private val httpServer = SampleHttpServer(TEST_PORT)
 
     @AfterEach
     fun tearDown() {
@@ -24,18 +27,7 @@ class ChunkHttpServerTest {
 
         // Then
         assertEquals(
-            "HTTP/1.1 200 OK\r\n" +
-                    "Transfer-Encoding: chunked\r\n" +
-                    "Content-Type: text/plain\r\n" +
-                    "\r\n" +
-                    "5\r\n" +
-                    "123\r\n\r\n" +
-                    "2\r\n" +
-                    "ab\r\n" +
-                    "0\r\n" +
-                    "\r\n" +
-                    "13\r\n" +
-                    "am I ignored?\r\n",
+            "HTTP/1.1 200 OK\r\nContent-Type: text/plain\r\n" + "Content-Length: 25\r\n\r\nHello, World and /sample!",
             decodeResponse(socket)
         )
 
